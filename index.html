@@ -50,7 +50,7 @@
         
         .game-icon { 
             position: absolute; 
-            font-size: 1.4rem; 
+            font-size: 0.8rem; /* MODIFIED: Reduced animal icon base size */
             text-align: center; 
             text-shadow: 0 1px 3px rgba(0,0,0,0.4); 
             transition: all 1s ease-in-out; 
@@ -58,14 +58,14 @@
         }
         .game-icon span { 
             display: block; 
-            font-size: 0.7rem; 
+            font-size: 0.6rem; /* MODIFIED: Reduced animal name font size */
             font-weight: bold; 
             color: #fff; 
             text-shadow: 0 1px 2px rgba(0,0,0,0.6);
         }
         
         .disturbance-icon { transition: transform 0.5s ease-out; }
-        .disturbance-icon .icon-symbol { font-size: 2rem; color: red; animation: pulse 1.5s infinite; }
+        .disturbance-icon .icon-symbol { font-size: 1.2rem; /* MODIFIED: Reduced disturbance icon size */ color: red; animation: pulse 1.5s infinite; }
         
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         @keyframes move-randomly { 0% { transform: translate(0, 0); } 25% { transform: translate(var(--x1), var(--y1)); } 50% { transform: translate(var(--x2), var(--y2)); } 75% { transform: translate(var(--x3), var(--y3)); } 100% { transform: translate(0, 0); } }
@@ -75,7 +75,8 @@
         
         .drop-zone.hovered { background: rgba(144, 238, 144, 0.5); }
         .drop-zone.occupied { border-style: solid; border-color: #228b22; background-color: transparent; }
-        .facility { cursor: grab; transition: transform 0.2s; }
+        /* MODIFIED: Reduced facility card padding */
+        .facility { cursor: grab; transition: transform 0.2s; padding: 0.25rem 0.5rem; }
         .facility:active { cursor: grabbing; transform: scale(1.1); z-index: 100; }
         .facility.placed { opacity: 0.5; cursor: not-allowed; background-color: #d1d5db; }
         .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; display: flex; justify-content: center; align-items: center; }
@@ -108,8 +109,9 @@
             <h2 class="text-xl md:text-2xl font-semibold text-green-700">農田微棲地生態設置小遊戲</h2>
         </header>
 
-        <div class="flex flex-col lg:flex-row gap-8">
-            <main class="w-full lg:w-4/5">
+        <!-- MODIFIED: Changed layout to vertical stacking on all screen sizes -->
+        <div class="flex flex-col gap-8">
+            <main class="w-full">
                 <div id="scene" class="game-scene">
                     <canvas id="connection-canvas"></canvas>
                     <div id="animal-pen"></div>
@@ -139,9 +141,9 @@
                 </div>
             </main>
 
-            <aside class="w-full lg:w-1/5 bg-white p-4 rounded-lg shadow-lg">
-                <h3 class="text-md font-bold border-b-2 border-green-600 pb-2 mb-4">生態設施</h3>
-                <div id="facilities-list" class="space-y-2 h-[60vh] overflow-y-auto"></div>
+            <aside class="w-full bg-white p-4 rounded-lg shadow-lg">
+                <h3 class="text-md font-bold border-b-2 border-green-600 pb-2 mb-2">生態設施 <span class="text-xs text-gray-500 font-normal">(使用手機請長按>移動卡牌)</span></h3>
+                <div id="facilities-list" class="flex flex-row flex-wrap gap-2 justify-center"></div>
             </aside>
         </div>
 
@@ -202,7 +204,6 @@
         // --- DATA SETUP ---
         const gameData = {
             animals: [
-                // 1. 森林或淺山交界
                 { id: 'leopard-cat-1', name: '石虎', icon: '🐆', position: { top: '35%', left: '15%' }, habitat: 'forest', released: false },
                 { id: 'ferret-badger-1', name: '鼬獾', icon: '🦡', position: { top: '42%', left: '22%' }, habitat: 'forest', released: false },
                 { id: 'snake-1', name: '蛇類', icon: '🐍', position: { top: '40%', left: '5%' }, habitat: 'forest', released: false },
@@ -210,32 +211,24 @@
                 { id: 'frog-1', name: '諸羅樹蛙', icon: '🐸', position: { top: '56%', left: '8%' }, habitat: 'forest', released: false },
                 { id: 'bird-1', name: '竹雞', icon: '🐔', position: { top: '20%', left: '10%' }, habitat: 'forest', released: false },
                 { id: 'butterfly-3', name: '蝴蝶', icon: '🦋', position: { top: '25%', left: '20%' }, habitat: 'forest', released: false },
-
-                // 2. 溪流、農田排水溝、水塘區
                 { id: 'frog-2', name: '澤蛙', icon: '🐸', position: { top: '85%', left: '65%' }, habitat: 'water_edge', released: false },
                 { id: 'bird-2', name: '白鷺', icon: '🦢', position: { top: '78%', left: '90%' }, habitat: 'water_edge', released: false },
                 { id: 'fish-1', name: '魚類', icon: '🐟', position: { top: '65%', left: '82%' }, habitat: 'water_edge', released: false },
                 { id: 'dragonfly-1', name: '蜻蜓', icon: '🦗', position: { top: '70%', left: '78%' }, habitat: 'water_edge', released: false },
                 { id: 'aquatic-insect-1', name: '水生昆蟲', icon: '🦟', position: { top: '80%', left: '75%' }, habitat: 'water_edge', released: false },
                 { id: 'firefly-2', name: '螢火蟲', icon: '💡', position: { top: '78%', left: '8%' }, habitat: 'water_edge', released: false },
-                
-                // 3. 田間低窪地或濕地池
                 { id: 'frog-3', name: '澤蛙', icon: '🐸', position: { top: '95%', left: '35%' }, habitat: 'wetland', released: false },
                 { id: 'tortoise-2', name: '烏龜', icon: '🐢', position: { top: '95%', left: '50%' }, habitat: 'wetland', released: false },
                 { id: 'firefly-1', name: '螢火蟲', icon: '💡', position: { top: '82%', left: '42%' }, habitat: 'wetland', released: false },
                 { id: 'dragonfly-2', name: '蜻蜓', icon: '🦗', position: { top: '83%', left: '48%' }, habitat: 'wetland', released: false },
                 { id: 'aquatic-insect-2', name: '水黽', icon: '🦟', position: { top: '93%', left: '52%' }, habitat: 'wetland', released: false },
                 { id: 'butterfly-2', name: '蝴蝶', icon: '🦋', position: { top: '82%', left: '33%' }, habitat: 'wetland', released: false },
-
-                // 4. 田與田之間、田埂草帶
                 { id: 'frog-4', name: '青蛙', icon: '🐸', position: { top: '68%', left: '30%' }, habitat: 'farm_corridor', released: false },
                 { id: 'bee-2', name: '蜜蜂', icon: '🐝', position: { top: '65%', left: '55%' }, habitat: 'farm_corridor', released: false },
                 { id: 'butterfly-1', name: '蝴蝶', icon: '🦋', position: { top: '62%', left: '30%' }, habitat: 'farm_corridor', released: false },
                 { id: 'bird-4', name: '竹雞', icon: '🐔', position: { top: '78%', left: '30%' }, habitat: 'farm_corridor', released: false },
                 { id: 'ferret-badger-2', name: '鼬獾', icon: '🦡', position: { top: '62%', left: '25%' }, habitat: 'farm_corridor', released: false },
                 { id: 'snake-3', name: '蛇類', icon: '🐍', position: { top: '56%', left: '56%' }, habitat: 'farm_corridor', released: false },
-
-                // 5. 農舍與農業設施周邊
                 { id: 'bee-1', name: '蜜蜂', icon: '🐝', position: { top: '48%', left: '53%' }, habitat: 'farm_building', released: false }, 
                 { id: 'bird-5', name: '麻雀', icon: '🦜', position: { top: '40%', left: '54%' }, habitat: 'farm_building', released: false }, 
                 { id: 'ferret-badger-3', name: '鼬獾', icon: '🦡', position: { top: '48%', left: '62%', habitat: 'farm_building', released: false }}, 
