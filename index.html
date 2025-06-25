@@ -71,10 +71,11 @@
         @keyframes move-randomly { 0% { transform: translate(0, 0); } 25% { transform: translate(var(--x1), var(--y1)); } 50% { transform: translate(var(--x2), var(--y2)); } 75% { transform: translate(var(--x3), var(--y3)); } 100% { transform: translate(0, 0); } }
         .animal.active { animation: move-randomly 10s infinite; }
         
-        .drop-zone { position: absolute; border: 3px dashed rgba(0, 128, 0, 0.7); background: rgba(144, 238, 144, 0.2); border-radius: 10px; z-index: 35; transition: background-color 0.3s; cursor: pointer; }
-        
-        .drop-zone.hovered { background: rgba(144, 238, 144, 0.5); }
+        /* MODIFIED: Changed drop zone border and background color to red */
+        .drop-zone { position: absolute; border: 3px dashed rgba(255, 0, 0, 0.7); background: rgba(255, 100, 100, 0.2); border-radius: 10px; z-index: 35; transition: background-color 0.3s; cursor: pointer; }
+        .drop-zone.hovered { background: rgba(255, 100, 100, 0.5); }
         .drop-zone.occupied { border-style: solid; border-color: #228b22; background-color: transparent; }
+        
         .facility { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; padding: 0.25rem 0.5rem; }
         .facility.selected { box-shadow: 0 0 15px yellow; transform: scale(1.05); }
         .facility.placed { opacity: 0.5; cursor: not-allowed; }
